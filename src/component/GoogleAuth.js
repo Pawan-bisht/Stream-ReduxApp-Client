@@ -41,7 +41,7 @@ import { signIn, signOut } from './actions';
         // this.setState({
         //     isSignedIn: this.auth.isSignedIn.get()
         // })
-        console.log(isSignedIn);
+        // console.log(isSignedIn);
         if(isSignedIn)
         {
             this.props.signIn(this.auth.currentUser.get().getId());
@@ -80,7 +80,7 @@ import { signIn, signOut } from './actions';
 }
 
 const mapStateToProps = (state)=>{
-    console.log(state);
+    // console.log(state);
     return { isSignedIn : state.auth.isSignedIn  };
 }
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import {  Field, reduxForm } from "redux-form";
-import { Button, Input, Label, Form, Modal, Message } from 'semantic-ui-react';
+import {  Field, reduxForm, reset } from "redux-form";
+import { Button, Input, Label, Form, Modal, Message, Container } from 'semantic-ui-react';
 
 class StreamCreate extends Component{
     
@@ -13,19 +13,18 @@ class StreamCreate extends Component{
     }
     
     renderError = ({ touched, error}) =>{
-        console.log(error);
+        console.log(error, touched);
         if(touched && error)
         {
             return (<Message error content={error} />);
         }
-        
     }
 
     renderInput = (formProps) => {
-        
-        const className = `${formProps.meta.error && formProps.meta.touched ? 'error':"" }`;
-        console.log(className);
-        return (<Form.Field className={className}> 
+        const classNames = `${formProps.meta.error && formProps.meta.touched ? 'error':'' }`;
+        // console.log(className);
+        console.log(formProps.meta);
+        return (<Form.Field className={classNames}>
             <Label>{formProps.label}</Label>
             <Input {...formProps.input} placeholder={formProps.placeholder}/>
             {this.renderError(formProps.meta)}
@@ -37,41 +36,45 @@ class StreamCreate extends Component{
     }
 
     render()
-    {   const { handleSubmit, submitting } = this.props;
+    {   const { handleSubmit, submitting, resetForm } = this.props;
+    console.log(this.props);
         return (
-            <Modal
-            open={this.state.open} 
-            trigger={<Button>Create Stream</Button>}
-            onOpen={() => this.setState({ open:true})}
-            onClose={() => this.setState({ open:false})}
-            >
+            // <Modal
+            // open={this.state.open}
+            // trigger={<Button>Create Stream</Button>}
+            // onOpen={() => this.setState({ open:true})}
+            // onClose={() => this.setState({ open:false})}
+            // >
+                <Container>
+                <br/>
                 <Form error onSubmit={handleSubmit(this.onSubmit)} >
                     <Field name="title" component={this.renderInput} placeholder="Title" label="Enter title"/>
                     <Field name="description" component={this.renderInput} placeholder="Description" label="Enter description" />
-                    <Modal.Actions >
+                    
                     <Button positive floated="right" type="submit" disabled={submitting}>Submit</Button>
-                    <Button floated="right" onClick={()=>this.setState({ open:false})}>Cancel</Button>
-                    </Modal.Actions>
+                    {/* <Button floated="right" type="button" onClick={()=>{ this.setState({ open:false})}}>Cancel</Button> */}
+                    
                 </Form>
                 <br/>
-                <br/>
-            </Modal>
+                </Container>
+            // </Modal>
                 )
     }
 }
 
 const validate = formValues =>{
-
-    const errors = {};
+    console.log(formValues);
+    console.log("Validation");
+    const error = {};
     if(!formValues.title)
     {
-        errors.title = "You must enter a title";
+        error.title = "You must enter a title";
     }
     if(!formValues.description)
     {
-        errors.description = "You must enter a description";
+        error.description = "You must enter a description";
     }
-    return errors;
+    return error;
 }
 
 export default reduxForm({ form: "streamCreate", validate})(StreamCreate);
